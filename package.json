@@ -4,13 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docs": "node ./src/index.js"
+  },
+  "bin": {
+    "docs": "./bin/docs.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@vuese/markdown-render": "^2.11.3",
-    "@vuese/parser": "^2.10.3"
+    "@vuese/parser": "^2.10.3",
+    "fs-extra": "^9.0.1",
+    "joycon": "^2.2.5",
+    "log-horizon": "^0.1.2"
   }
 }
