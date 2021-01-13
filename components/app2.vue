@@ -82,8 +82,8 @@
 
 <script>
     const systemInfo = uni.getSystemInfoSync();
-    // 自定义头部组件
-    // example-start
+    // 自定义头部组件1111111
+    // example:start
     /**
      * 
      * <template>
@@ -110,8 +110,9 @@
         },
     }
      */
-    // example-end
+    // example:end
     export default {
+        name: 'components',
         props: {
             // 背景颜色
             bgcolor: {
