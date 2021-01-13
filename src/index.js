@@ -20,7 +20,9 @@ async function getDocute() {
         children: links
     }]);
     // 格式化模板
-    formatTemplate(groupsStr, '学区宝组件库', './docs');
+    formatTemplate(groupsStr, '学区宝组件库', data.outDir);
+    // reame.md
+    formatReadme(links, data.outDir); 
 }
 
 // 读取配置
@@ -45,8 +47,17 @@ async function formatTemplate(groupsStr, title, outDir) {
             const target = path.resolve(targetDir, 'index.html');
             fs.outputFile(target, template);
         }
-    );
-    
+    ); 
+}
+
+// 生成readme文档
+function formatReadme(links, outDir) {
+    const str = links
+        .map(item => `[${item.title}](${item.link})`)
+        .join('\n');
+    const targetDir = path.resolve(outDir);
+    const readmeTarget = path.resolve(targetDir, 'readme.md');
+    fs.outputFile(readmeTarget, str);
 }
 
 
