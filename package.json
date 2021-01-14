@@ -1,16 +1,16 @@
 {
-  "name": "test",
+  "name": "hjt-docs",
   "version": "1.0.0",
-  "description": "",
+  "description": "一个vue组件文档生成器",
   "main": "index.js",
   "scripts": {
     "docs": "node ./src/index.js"
   },
   "bin": {
-    "docs": "./bin/docs.js"
+    "hjt-docs": "./bin/docs.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["vue-components-docs"],
+  "author": "Larry8799, Alex-Li2018",
   "license": "ISC",
   "dependencies": {
     "@vuese/markdown-render": "^2.11.3",
