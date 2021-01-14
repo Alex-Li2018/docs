@@ -5,10 +5,26 @@ const JoyCon = require('joycon')
 
 async function getDocute() {
     const { data } = await getConfig();
-    // 生成文档
-    const componentsPromise = await genMarkdown(data);
-    const componentsRes = await Promise.all(componentsPromise);
-    const components = componentsRes.filter(_ => _);
+    if (!data.inputDir || !data.inputDir.length) {
+        return;
+    }
+
+    const componentsDirPromise = data.inputDir.map(async (item) => {
+        // 生成文档
+        const componentsPromise = await genMarkdown({
+            outDir: data.outDir, 
+            inputDir: item
+        });
+        const componentsRes = await Promise.all(componentsPromise);
+        const arr = componentsRes.filter(_ => _);
+        return arr;
+    });
+
+    const componentsDir = await Promise.all(componentsDirPromise);
+    const components = componentsDir.reduce(function(total, current) {
+        return total.concat(current);
+    }, []);
+    
     // 组装links数据
     const links = components.map(({ compName }) => ({
         title: compName,
@@ -20,7 +36,9 @@ async function getDocute() {
         children: links
     }]);
     // 格式化模板
-    formatTemplate(groupsStr, '学区宝组件库', './docs');
+    formatTemplate(groupsStr, '学区宝组件库', data.outDir);
+    // reame.md
+    formatReadme(links, data.outDir); 
 }
 
 // 读取配置
@@ -45,8 +63,17 @@ async function formatTemplate(groupsStr, title, outDir) {
             const target = path.resolve(targetDir, 'index.html');
             fs.outputFile(target, template);
         }
-    );
-    
+    ); 
+}
+
+// 生成readme文档
+function formatReadme(links, outDir) {
+    const str = links
+        .map(item => `[${item.title}](${item.link})`)
+        .join('\n');
+    const targetDir = path.resolve(outDir);
+    const readmeTarget = path.resolve(targetDir, 'readme.md');
+    fs.outputFile(readmeTarget, str);
 }
 
 
