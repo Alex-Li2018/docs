@@ -2,6 +2,9 @@ const { parser }  = require("@vuese/parser");
 const { Render }  = require("@vuese/markdown-render");
 const fs = require("fs-extra")
 const path = require('path');
+const Log = require('log-horizon');
+
+const logger = Log.create();
 
 // 生成markdown
 async function genMarkdown(config) {
@@ -10,7 +13,7 @@ async function genMarkdown(config) {
     const res = await fs.stat(path.resolve(inputDir));
     // 是文件
     if (res.isFile()) {
-      console.log('请检查inputDIr,目录必须是文件夹,不能是文件');
+      logger.error('请检查inputDIr,目录必须是文件夹,不能是文件');
       return;
     }
     // 是文件目录
@@ -41,7 +44,7 @@ async function genMarkdown(config) {
       });
     }
   } catch(e) {
-    console.log(e);
+    logger.error('error: ', err);
   }
 }
 
@@ -69,6 +72,7 @@ async function writeMDFile(str, fileName, outDir) {
   const target = path.resolve(targetDir, fileName + '.md');
   await fs.ensureDir(targetDir);
   await fs.outputFile(target, str);
+  logger.success(`Successfully created: ${target}`);
 }
 
 module.exports = genMarkdown;

@@ -1,13 +1,17 @@
 const genMarkdown = require('./lib/generateMarkDown.js');
 const fs = require('fs-extra');
 const path = require('path');
-const JoyCon = require('joycon')
+const JoyCon = require('joycon');
+const Log = require('log-horizon');
 
+const logger = Log.create();
 async function getDocute() {
     const { data } = await getConfig();
     if (!data.inputDir || !data.inputDir.length) {
         return;
     }
+
+    logger.progress('Start creating markdown files...');
 
     const componentsDirPromise = data.inputDir.map(async (item) => {
         // 生成文档
@@ -38,7 +42,7 @@ async function getDocute() {
     // 格式化模板
     formatTemplate(groupsStr, '学区宝组件库', data.outDir);
     // reame.md
-    formatReadme(links, data.outDir); 
+    formatReadme(links, data.outDir);
 }
 
 // 读取配置
@@ -62,6 +66,7 @@ async function formatTemplate(groupsStr, title, outDir) {
             const targetDir = path.resolve(outDir);
             const target = path.resolve(targetDir, 'index.html');
             fs.outputFile(target, template);
+            logger.success(`Successfully created: ${target}`);
         }
     ); 
 }
@@ -74,6 +79,7 @@ function formatReadme(links, outDir) {
     const targetDir = path.resolve(outDir);
     const readmeTarget = path.resolve(targetDir, 'readme.md');
     fs.outputFile(readmeTarget, str);
+    logger.success(`Successfully created: ${readmeTarget}`);
 }
 
 
