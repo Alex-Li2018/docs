@@ -95,7 +95,6 @@
             :wxColor="wxColor"
         />
     </template>
-    <script>
     import BaseNavCustom from '@/components/BaseNavCustom';
     export default {
         components: {

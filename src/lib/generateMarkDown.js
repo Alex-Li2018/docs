@@ -3,6 +3,7 @@ const { Render }  = require("@vuese/markdown-render");
 const fs = require("fs-extra")
 const path = require('path');
 const Log = require('log-horizon');
+const { js_beautify, html_beautify } = require('js-beautify')
 
 const logger = Log.create();
 
@@ -52,7 +53,10 @@ async function genMarkdown(config) {
 function componentsExampleHandler(content) {
   const temp = (content.default.join('\n').split('example:start'));
   if(/example:end|example:start/.test(content.default.join('\n'))) {
-    return '\n```vue' + temp[1].replace(/example:end/, '') + '</script>\n' + '```';
+    const data = temp[1].replace(/example:end/, '') || '';
+    let htmlTemplate = html_beautify(data.match(/<[^>]+>/g).join(''));
+    let jsTemplate = (data.split('>').length > 0 && js_beautify(data.split('>')[data.split('>').length - 1])) || '';
+    return ('\n```vue' + '\n' + htmlTemplate + '\n' + '<script>' + '\n' + jsTemplate + '\n' +  '</script>\n' + '```');
   } 
   return '';
 } 

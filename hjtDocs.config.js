@@ -1,7 +1,6 @@
 module.exports = {
     inputDir: [
-        './components',
-        './componentsS'
+        './components'
     ],
     outDir: './docs'
 };
