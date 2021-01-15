@@ -26,9 +26,7 @@ $>  touch hjtDocs.config.js
 
 ```js
 module.exports = {
-	inputDir: [
-		'./components' // 需要生成文档的组件目录
-    ],
+	inputDir: [ './components' ], // 需要生成文档的组件目录
   	outDir: './docs' // 文档输出的目录
 };
 ```
