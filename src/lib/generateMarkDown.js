@@ -76,7 +76,7 @@ async function genMarkdown(config) {
 
 // 寻找文件里的示例
 function componentsExampleHandler(content) {
-  if (content.default.join('\n').includes('example:start')) {
+  if (!content.default.join('\n').includes('example:start')) {
     return '';
   }
   const temp = (content.default.join('\n').split('example:start'));
