@@ -19,7 +19,32 @@ async function genMarkdown(config) {
     }
     // 是文件目录
     if (res.isDirectory()) {
-      const files = await fs.readdir(path.resolve(inputDir));
+      const filesArr = await fs.readdir(path.resolve(inputDir));
+
+      // 返回vue文件
+      let files = filesArr.filter(item => {
+        // 是vue文件
+        const vueFile = path.extname(path.resolve(inputDir, item)) === '.vue';
+
+        return vueFile;
+      });
+
+      const filesDir = filesArr.filter(item => {
+        return path.extname(path.resolve(inputDir, item)) === '';
+      });
+
+      const filesDeepPromise = filesDir.map(async (item) => {
+        const stat = await fs.stat(path.resolve(inputDir, item));
+        if (stat.isDirectory()) {
+          const res = await fs.readdir(path.resolve(inputDir, item))
+          const filePath = res.map(p => { return item + '/' + p });
+          return filePath;
+        }
+      });
+
+      let filesDeep = await Promise.all(filesDeepPromise);
+      filesDeep = filesDeep.filter(_ => _);
+      files = files.concat(...filesDeep);
 
       return files.map(async (f) => {
         const abs = path.resolve(inputDir, f);
@@ -51,6 +76,9 @@ async function genMarkdown(config) {
 
 // 寻找文件里的示例
 function componentsExampleHandler(content) {
+  if (!content.default.join('\n').includes('example:start')) {
+    return '';
+  }
   const temp = (content.default.join('\n').split('example:start'));
   if(/example:end|example:start/.test(content.default.join('\n'))) {
     const data = temp[1].replace(/example:end/, '') || '';
