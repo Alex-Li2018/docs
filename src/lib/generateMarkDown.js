@@ -1,4 +1,4 @@
-const { parser }  = require("@vuese/parser");
+const { parser }  = require("../util/parse");
 const { Render }  = require("@vuese/markdown-render");
 const fs = require("fs-extra")
 const path = require('path');
